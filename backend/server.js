@@ -16,9 +16,8 @@ connection.once("open", () => {
   console.log(" MONGO DB connection established succesfully ");
 });
 
-app.get("/", (req, res) => {
-  res.send("Hello from the notenest backend");
-});
+const notesrouter = require("./routes/notes");
+app.use("/api/notes", notesrouter);
 
 app.listen(port, () => {
   console.log(`server is running on port : ${port}`);
