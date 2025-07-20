@@ -8,13 +8,13 @@ function Note({ note, handleDelete, handleEdit }) {
       <div className="flex justify-end gap-4 mt-4">
         <button
           onClick={() => handleEdit(note)}
-          className="text-sm font-semibold text-purple-400 hover:text-purple-300 transition-colors duration-200"
+          className="text-sm font-semibold text-purple-400 cursor-pointer hover:text-purple-300 transition-colors duration-200"
         >
           Edit
         </button>
         <button
           onClick={() => handleDelete(note._id)}
-          className="text-sm font-semibold text-red-500 hover:text-red-400 transition-colors duration-200"
+          className="text-sm font-semibold text-red-500 hover:text-red-400 transition-colors duration-200 cursor-pointer "
         >
           Delete
         </button>

@@ -2,11 +2,14 @@ import { useState, useEffect } from "react";
 import Note from "../components/Note";
 import AddNote from "../components/AddNote";
 import axios from "axios";
+import EditModal from "../components/EditModal";
 
 const API_URL = "http://localhost:5000/api/notes";
 
 function App() {
   const [notes, setnotes] = useState([]);
+  const [currentNote, setcurrentNote] = useState(null);
+  const [isModalopen, setisModalopen] = useState(false);
   const fetchnotes = () => {
     axios
       .get(API_URL)
@@ -38,6 +41,26 @@ function App() {
     fetchnotes();
   }, []);
 
+  const handleUpdateNote = (updatedNote) => {
+    axios
+      .post(`${API_URL}/update/${updatedNote._id}`, updatedNote)
+      .then(() => {
+        fetchnotes();
+        handleCloseModal();
+      })
+      .catch((error) => console.error("Error updated note:", error));
+  };
+
+  const handleOpenModal = (note) => {
+    setcurrentNote(note);
+    setisModalopen(true);
+  };
+
+  const handleCloseModal = () => {
+    setcurrentNote(null);
+    setisModalopen(false);
+  };
+
   return (
     <div className="bg-gray-900 min-h-screen text-gray-200 p-4">
       <div className="max-w-4xl mx-auto">
@@ -53,10 +76,18 @@ function App() {
                 key={note._id}
                 note={note}
                 handleDelete={handleDeleteNote}
+                handleEdit={handleOpenModal}
               />
             ))}
           </div>
         </main>
+        {isModalopen && (
+          <EditModal
+            note={currentNote}
+            onClose={handleCloseModal}
+            onSave={handleUpdateNote}
+          />
+        )}
       </div>
     </div>
   );
