@@ -35,15 +35,15 @@ function App() {
   };
 
   useEffect(() => {
-    fetchnotes;
+    fetchnotes();
   }, []);
 
   return (
-    <div className="bg-gray-950 min-h-screen text-green-900 p-4">
+    <div className="bg-gray-900 min-h-screen text-gray-200 p-4">
       <div className="max-w-4xl mx-auto">
         <header className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-green-600"> Note Nest</h1>
-          <p className="text-green-500 mt-2">Your Thoughts , Organized</p>
+          <h1 className="text-4xl font-bold text-blue-400"> Note Nest</h1>
+          <p className="text-purple-400 mt-2">Your Thoughts , Organized</p>
         </header>
         <main>
           <AddNote handleAddNote={handleAddNote} />
