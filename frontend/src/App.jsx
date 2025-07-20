@@ -4,7 +4,7 @@ import AddNote from "../components/AddNote";
 import axios from "axios";
 import EditModal from "../components/EditModal";
 
-const API_URL = "https://note-nest-phi.vercel.app//api/notes";
+const API_URL = "https://note-nest-be.vercel.app/api/notes";
 
 function App() {
   const [notes, setnotes] = useState([]);
