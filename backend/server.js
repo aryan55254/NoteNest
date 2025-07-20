@@ -1,35 +1,60 @@
-const express = require("express");
-const connectDB = require("./db/connectdb");
-const cors = require("cors");
-const path = require('path');
-require("dotenv").config();
+const router = require("express").Router();
+const Note = require("../models/note.model");
 
-const app = express();
-const port = process.env.PORT || 5000;
-
-app.use(cors());
-app.use(express.json());
-
-// --- DEPLOYMENT CODE ---
-// This code serves the static files from the React frontend
-if (process.env.NODE_ENV === "production") {
-  // We are creating an absolute path to the frontend's dist folder
-  const frontendDistPath = path.resolve(__dirname, "..", "frontend", "dist");
-
-  // Serve the static files from that absolute path
-  app.use(express.static(frontendDistPath));
-
-  // For any other request, send back the index.html file from that absolute path
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(frontendDistPath, "index.html"));
-  });
-}
-// --- END DEPLOYMENT CODE ---
-connectDB();
-
-const notesrouter = require("./routes/notes");
-app.use("/api/notes", notesrouter);
-
-app.listen(port, () => {
-  console.log(`server is running on port : ${port}`);
+// GET all notes
+router.get("/", (req, res) => {
+  Note.find()
+    .then((notes) => res.json(notes))
+    .catch((err) => res.status(400).json("error: " + err));
 });
+
+// POST a new note
+router.post("/add", (req, res) => {
+  const newNote = new Note({
+    title: req.body.title,
+    content: req.body.content,
+  });
+
+  newNote
+    .save()
+    .then(() => res.json("Note added!"))
+    .catch((err) => res.status(400).json("error: " + err));
+});
+
+
+/*
+// --- TEMPORARILY COMMENTED OUT FOR DEBUGGING ---
+
+// GET a specific note by ID
+router.get("/:id", (req, res) => {
+  Note.findById(req.params.id)
+    .then((note) => res.json(note))
+    .catch((err) => res.status(400).json("error: " + err));
+});
+
+// DELETE a specific note by ID
+router.delete("/:id", (req, res) => {
+  Note.findByIdAndDelete(req.params.id)
+    .then(() => res.json("Note deleted."))
+    .catch((err) => res.status(400).json("error: " + err));
+});
+
+// POST to update a specific note by ID
+router.post("/update/:id", (req, res) => {
+  Note.findById(req.params.id)
+    .then((note) => {
+      note.title = req.body.title;
+      note.content = req.body.content;
+
+      note
+        .save()
+        .then(() => res.json("Note updated!"))
+        .catch((err) => res.status(400).json("error: " + err));
+    })
+    .catch((err) => res.status(400).json("error: " + err));
+});
+
+*/
+
+
+module.exports = router;
